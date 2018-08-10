@@ -27,6 +27,18 @@ server.post('/projects', (req, res) => {
     });
 });
 
+server.get('/projects/:id', (req, res) => {
+  const { id } = req.params;
+  db('projects')
+    .where("id", id)
+    .then(project => {
+      res.status(200).json(project);
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    });
+});
+
 server.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 })
