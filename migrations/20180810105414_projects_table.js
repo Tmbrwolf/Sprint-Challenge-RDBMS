@@ -13,6 +13,7 @@ exports.up = function(knex, Promise) {
     .notNullable();
 
     project.boolean('completed').defaultTo(false);
+  })
 };
 
 exports.down = function(knex, Promise) {
