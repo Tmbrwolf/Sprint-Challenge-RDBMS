@@ -57,13 +57,69 @@ server.delete('/projects/:id', (req, res) => {
     .where({ id })
     .del()
     .then(response => {
-      res.status(200).json(`${id} is deleted.`);
+      res.status(200).json(`Project ID:${id} is deleted.`);
     })
     .catch(error => {
       res.status(500).json({error});
     });
 });
 
+// ACTIONS endpoints
+server.get('/actions', (req, res) => {
+  db('actions')
+    .then(actions => {
+      res.status(200).json({actions});
+    })
+    .catch(error => {
+      res.status(500).json({error});
+    });
+});
+
+// Totally untested ACTIONS endpoints
+server.get('/actions/:id', (req, res) => {
+  const { id } = req.params;
+  db('actions')
+    .where({ id })
+    .then((action) => {
+      res.status(200).json(action);
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    });
+});
+
+// Need to add join functionality to POST method
+server.post('/actions', (req, res) => {
+  const action = req.body;
+  db.insert(action).into('actions')
+    .then(response => res.status(200).json({action}))
+    .catch(error => res.status(500).json(error));
+});
+
+server.put('/actions/:id', (req, res) => {
+  const { id } = req.params;
+  const action = req.body;
+  db('actions')
+    .where("id", id)
+    .update(action)
+    .then(action => {
+      res.status(201).json({action});
+    })
+    .catch(error => res.status(500).json({error}));
+});
+
+server.delete('/actions/:id', (req, res) => {
+  const { id } = req.params;
+  db('actions')
+    .where({ id })
+    .del()
+    .then(response => {
+      res.status(200).json(`Actions ID:${id} is deleted.`);
+    })
+    .catch(error => {
+      res.status(500).json({error});
+    });
+});
 
 server.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
